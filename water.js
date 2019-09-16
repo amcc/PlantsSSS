@@ -37,20 +37,42 @@ function getBySensorPin(pin) {
   return pumps.find(p => p.getSensorPin() === pin);
 }
 
-function onPumpUpdate(pin, data) {
-  console.log(pin, data);
+// pub sub relationship
+function onPumpUpdate(id, data) {
+  console.log(id, data);
 
-  pumpsRef.child(pin).set(data);
+  pumpsRef.child(id).set(data);
+  // use jsonfile to store data
 
+  // set interval hourly in index.js
 }
 
-function createPumps(pumpPins = []) {
-  pumpPins.forEach(obj => {
-    const pump = new Pump(obj.pump, obj.sensor, obj.plant, obj.side);
-    pump.onUpdate(onPumpUpdate);
+function createPumps(pumpParams = []) {
+  // pumpPins.forEach(obj => {
+  //   const pump = new Pump(obj.pump, obj.sensor, obj.plant, obj.side);
+  //   pump.onUpdate(onPumpUpdate);
 
-    pumps.push(pump);
-  });
+  //   pumps.push(pump);
+  // });
+
+  return Promise.all(pumpParams.map(obj => {
+    return pumpsRef.child(obj.id)
+      .once('value')
+      .then(snapshot => {
+        const pump = new Pump({
+          ...obj,
+          lastWatered: snapshot.val().lastWatered
+        });
+        pump.onUpdate(onPumpUpdate);
+    
+        return pump;
+      });
+  }))
+    .then(_pumps => {
+      _pumps.forEach(p => pumps.push(p));
+
+      return pumps;
+    });
 }
 
 function getLastWatered(pin) {
@@ -85,6 +107,10 @@ function getStatusAll() {
   }));
 }
 
+function getPumps() {
+  return pumps.slice();
+}
+
 function isAutoWatering() {
   return autoWatering;
 }
@@ -98,6 +124,7 @@ module.exports = {
   getLastWatered,
   getStatus,
   getStatusAll,
+  getPumps,
   autoWater,
   autoWaterAll,
   isAutoWatering,

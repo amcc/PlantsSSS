@@ -81,13 +81,15 @@ function template({ title = 'HELLO!', text = '' } = {}) {
 
 // Water.createPumps(PINS);
 
-Water.createPumps(Hardware);
-// turn on autowater at the beginning 
-Water.autoWaterAll(true);
+Water.createPumps(Hardware)
+  .then(() => {
+    // turn on autowater at the beginning 
+    Water.autoWaterAll(true);
+  });
 
 app.get('/', (req, res) => {
   res.render('index.html', template());
-});
+});   
 
 app.get('/auto/water/:toggle', (req, res) => {
   let text;
