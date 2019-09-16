@@ -22,6 +22,7 @@ firebaseAdmin.initializeApp({
 // setup firebase refs
 const rootRef = firebaseAdmin.database().ref('wateringStatus');
 const pumpsRef = rootRef.child('pumps');
+const pumpsHistoryRef = rootRef.child('pumpsHistory');
 
 const Pump = require("./components/Pump");
 
@@ -42,9 +43,8 @@ function onPumpUpdate(id, data) {
   console.log(id, data);
 
   pumpsRef.child(id).set(data);
-  // use jsonfile to store data
-
-  // set interval hourly in index.js
+  var timestamp = Date.now();
+  pumpsHistoryRef.child(timestamp).child(key).set(data);
 }
 
 function createPumps(pumpParams = []) {
