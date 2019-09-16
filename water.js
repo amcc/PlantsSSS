@@ -59,9 +59,10 @@ function createPumps(pumpParams = []) {
     return pumpsRef.child(obj.id)
       .once('value')
       .then(snapshot => {
+        const val = snapshot.val();
         const pump = new Pump({
           ...obj,
-          lastWatered: snapshot.val().lastWatered
+          lastWatered: val && val.hasOwnProperty('lastWatered') ? val.lastWatered : null
         });
         pump.onUpdate(onPumpUpdate);
     
