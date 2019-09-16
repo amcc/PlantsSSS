@@ -44,7 +44,7 @@ function onPumpUpdate(id, data) {
 
   pumpsRef.child(id).set(data);
   var timestamp = Date.now();
-  pumpsHistoryRef.child(timestamp).child(key).set(data);
+  pumpsHistoryRef.child(timestamp).child(id).set(data);
 }
 
 function createPumps(pumpParams = []) {
