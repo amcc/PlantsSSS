@@ -3,9 +3,9 @@ const GPIO = require('onoff').Gpio;
 const Sensor = require('./Sensor');
 
 class Pump {
-  constructor({ id, pin, sensorPin, plant, side, lastWatered = null } = {}, { openDelay = 2000, timeDelay = 5000 } = {}) {
+  constructor({ id, pump, sensorPin, plant, side, lastWatered = null } = {}, { openDelay = 2000, timeDelay = 5000 } = {}) {
     this.id = id;
-    this.pin = pin;
+    this.pin = pump;
     this.plant = plant;
     this.side = side;
     this.openDelay = openDelay;
