@@ -1,0 +1,5 @@
+PROJECT_ID = nameofproject-###
+PRIVATE_KEY_ID = ####
+PRIVATE_KEY = "-----BEGIN PRIVATE KEY-----######-----END PRIVATE KEY-----\n"
+CLIENT_EMAIL = ######.iam.gserviceaccount.com
+CLIENT_ID = #####
