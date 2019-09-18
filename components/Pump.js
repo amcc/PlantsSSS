@@ -1,9 +1,12 @@
-const GPIO = require('onoff').Gpio;
+const GPIO = require("onoff").Gpio;
 
-const Sensor = require('./Sensor');
+const Sensor = require("./Sensor");
 
 class Pump {
-  constructor({ id, pump, sensor, plant, side, lastWatered = null } = {}, { openDelay = 2000, timeDelay = 5000 } = {}) {
+  constructor(
+    { id, pump, sensor, plant, side, lastWatered = null } = {},
+    { openDelay = 2000, timeDelay = 5000 } = {}
+  ) {
     this.id = id;
     this.pin = pump;
     this.plant = plant;
@@ -11,7 +14,7 @@ class Pump {
     this.openDelay = openDelay;
     this.timeDelay = timeDelay;
 
-    this.gpio = new GPIO(this.pin, 'out', {
+    this.gpio = new GPIO(this.pin, "out", {
       activeLow: true
     });
     this.gpio.writeSync(0);
@@ -60,7 +63,7 @@ class Pump {
       // console.log("state value is: " + state)
       if (oldState != state) {
         oldState = state;
-        
+
         if (state == 1 && !this.autoWatering) {
           this._autoWater();
           // console.log("autowater");
@@ -73,7 +76,6 @@ class Pump {
 
     this.sensor.onChange(checkState);
     checkState(this.sensor.getStatus());
-    
   }
 
   _autoWater() {
@@ -113,11 +115,13 @@ class Pump {
       plant: this.plant,
       watering: this.autoWatering,
       dry: Boolean(this.sensor.getStatus()),
-      side: this.side,
+      side: this.side
     };
 
     if (this.lastUsed) {
+      if (data.lastWatered) {
         data.lastWatered = this.lastUsed.toISOString();
+      }
     }
 
     return data;
