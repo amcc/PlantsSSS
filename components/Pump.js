@@ -121,6 +121,7 @@ class Pump {
 
     if (this.lastUsed) {
       console.log('log the date', this.lastUsed)
+      this.lastUsed = new Date();
       data.lastWatered = this.lastUsed.toISOString();
     }
 
