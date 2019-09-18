@@ -29,6 +29,7 @@ class Pump {
   open() {
     // console.log(`Opening pump #${this.pin}`);
     this.lastUsed = new Date();
+    console.log("lastused", this.lastUsed);
     this.gpio.writeSync(1);
   }
 
@@ -119,9 +120,8 @@ class Pump {
     };
 
     if (this.lastUsed) {
-      if (data.lastWatered) {
-        data.lastWatered = this.lastUsed.toISOString();
-      }
+      console.log('log the date')
+      data.lastWatered = this.lastUsed.toISOString();
     }
 
     return data;
